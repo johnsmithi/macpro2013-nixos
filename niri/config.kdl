@@ -50,6 +50,16 @@ spawn-at-startup "mako"
 // xwayland-satellite запускать не нужно: niri >= 25.08 делает это сам,
 // когда X11-приложение пытается подключиться.
 
+// Обои: положите картинку в ~/Pictures/wallpaper.jpg или поменяйте путь.
+spawn-sh-at-startup "swaybg -i ~/Pictures/wallpaper.jpg -m fill"
+// Автоблокировка: через 10 минут простоя — swaylock, через 15 — погасить мониторы.
+spawn-sh-at-startup "swayidle -w timeout 600 'swaylock -f' timeout 900 'niri msg action power-off-monitors'"
+// История буфера обмена (вызов — Mod+Shift+V).
+spawn-sh-at-startup "wl-paste --type text --watch cliphist store"
+spawn-sh-at-startup "wl-paste --type image --watch cliphist store"
+// Ночной свет: широта/долгота Москвы — поправьте под свой город (-l широта -L долгота).
+spawn-sh-at-startup "wlsunset -l 55.8 -L 37.6"
+
 binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
 
@@ -105,6 +115,8 @@ binds {
     Mod+Equal { set-column-width "+10%"; }
     Mod+V { toggle-window-floating; }
     Mod+W { toggle-column-tabbed-display; }
+
+    Mod+Shift+V { spawn-sh "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"; }
 
     Print { screenshot; }
     Ctrl+Print { screenshot-screen; }

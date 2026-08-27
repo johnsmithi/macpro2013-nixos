@@ -24,8 +24,15 @@
 | Super+F | maximize column |
 | Super+Space | switch en/ru keyboard layout |
 | Print | screenshot |
+| Super+Shift+V | clipboard history (cliphist) |
 | Super+Alt+L | lock the screen |
 | Super+Shift+E | quit niri (back to GDM) |
+
+Running automatically in the background: **swaybg** (wallpaper — put an
+image at `~/Pictures/wallpaper.jpg` or change the path in `config.kdl`),
+**swayidle** (lock after 10 minutes idle, monitors off after 15),
+**cliphist** (clipboard history) and **wlsunset** (warm screen tint in the
+evening; your city's coordinates are set in `config.kdl`).
 
 ## Power off and reboot
 

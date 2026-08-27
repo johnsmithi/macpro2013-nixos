@@ -140,7 +140,10 @@
     fuzzel           # лаунчер (Mod+D)
     waybar           # панель
     mako             # уведомления
-    swaylock swayidle
+    swaylock swayidle # блокировка + автоблокировка (настроена в config.kdl)
+    swaybg           # обои (путь к картинке — в config.kdl)
+    cliphist         # история буфера обмена (Mod+Shift+V)
+    wlsunset         # ночной свет (тёплый экран вечером)
     wl-clipboard     # wl-copy / wl-paste
     xwayland-satellite # X11-приложения; niri >= 25.08 запускает его сам при необходимости
     pavucontrol
