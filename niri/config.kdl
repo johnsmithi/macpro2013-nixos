@@ -1,0 +1,127 @@
+// Конфиг niri (проверен против синтаксиса niri 26.04 из NixOS 26.05).
+// Системная копия лежит в /etc/niri/config.kdl; чтобы настраивать под себя,
+// скопируйте её в ~/.config/niri/config.kdl — пользовательский файл имеет приоритет.
+// Проверка синтаксиса: `niri validate`. Список мониторов: `niri msg outputs`.
+
+input {
+    keyboard {
+        xkb {
+            layout "us,ru"
+            options "grp:win_space_toggle" // Super+Space — переключение раскладки
+        }
+    }
+}
+
+// Мониторы niri настраивает автоматически. Для ручной настройки узнайте имя
+// через `niri msg outputs` (на Mac Pro это DP-N с "дырявой" нумерацией —
+// неиспользуемые DP-энкодеры Thunderbolt-мультиплексора тоже нумеруются).
+/-output "DP-1" {
+    mode "2560x1440@59.951"
+    scale 1
+    position x=0 y=0
+}
+
+layout {
+    gaps 16
+    center-focused-column "never"
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+    }
+    default-column-width { proportion 0.5; }
+    focus-ring {
+        width 4
+        active-color "#7fc8ff"
+        inactive-color "#505050"
+    }
+}
+
+prefer-no-csd
+
+screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+hotkey-overlay {
+    // skip-at-startup
+}
+
+spawn-at-startup "waybar"
+spawn-at-startup "mako"
+// xwayland-satellite запускать не нужно: niri >= 25.08 делает это сам,
+// когда X11-приложение пытается подключиться.
+
+binds {
+    Mod+Shift+Slash { show-hotkey-overlay; }
+
+    Mod+Return { spawn "alacritty"; }
+    Mod+T { spawn "alacritty"; }
+    Mod+D { spawn "fuzzel"; }
+    Super+Alt+L { spawn "swaylock"; }
+
+    Mod+Q { close-window; }
+
+    Mod+Left  { focus-column-left; }
+    Mod+Down  { focus-window-down; }
+    Mod+Up    { focus-window-up; }
+    Mod+Right { focus-column-right; }
+    Mod+H { focus-column-left; }
+    Mod+J { focus-window-down; }
+    Mod+K { focus-window-up; }
+    Mod+L { focus-column-right; }
+
+    Mod+Ctrl+Left  { move-column-left; }
+    Mod+Ctrl+Right { move-column-right; }
+    Mod+Ctrl+Down  { move-window-down; }
+    Mod+Ctrl+Up    { move-window-up; }
+
+    Mod+Home { focus-column-first; }
+    Mod+End  { focus-column-last; }
+
+    Mod+U { focus-workspace-down; }
+    Mod+I { focus-workspace-up; }
+    Mod+Ctrl+U { move-column-to-workspace-down; }
+    Mod+Ctrl+I { move-column-to-workspace-up; }
+
+    Mod+1 { focus-workspace 1; }
+    Mod+2 { focus-workspace 2; }
+    Mod+3 { focus-workspace 3; }
+    Mod+4 { focus-workspace 4; }
+    Mod+5 { focus-workspace 5; }
+    Mod+6 { focus-workspace 6; }
+    Mod+7 { focus-workspace 7; }
+    Mod+8 { focus-workspace 8; }
+    Mod+9 { focus-workspace 9; }
+
+    Mod+O repeat=false { toggle-overview; }
+
+    Mod+Comma  { consume-window-into-column; }
+    Mod+Period { expel-window-from-column; }
+
+    Mod+R { switch-preset-column-width; }
+    Mod+F { maximize-column; }
+    Mod+Shift+F { fullscreen-window; }
+    Mod+C { center-column; }
+    Mod+Minus { set-column-width "-10%"; }
+    Mod+Equal { set-column-width "+10%"; }
+    Mod+V { toggle-window-floating; }
+    Mod+W { toggle-column-tabbed-display; }
+
+    Print { screenshot; }
+    Ctrl+Print { screenshot-screen; }
+    Alt+Print { screenshot-window; }
+
+    XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+" "-l" "1.0"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1-"; }
+    XF86AudioMute        allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
+
+    Mod+Shift+E { quit; }
+    Mod+Shift+P { power-off-monitors; }
+}
+
+// В Mac Pro две одинаковые D300, но дисплеи физически подключены только к одной.
+// niri обычно сам берёт правильную (boot_vga), но если композитор тормозит —
+// он мог выбрать «слепую» карту. Тогда раскомментируйте и укажите render-узел
+// карты с разъёмами (смотрите `ls -l /dev/dri/by-path` и `niri msg outputs`):
+/-debug {
+    render-drm-device "/dev/dri/renderD128"
+}
