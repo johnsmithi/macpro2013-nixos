@@ -59,6 +59,8 @@ baked in).
 | [hardware-configuration.nix](hardware-configuration.nix) | template matching the documented partitioning; regenerated during install |
 | [niri/config.kdl](niri/config.kdl) | niri config, deployed to `/etc/niri/config.kdl` |
 | [waybar/](waybar/) | waybar config + style, deployed to `/etc/xdg/waybar/` |
+| [assets/](assets/) | starter wallpapers (Unsplash, see [CREDITS](assets/CREDITS.md)) |
+| [scripts/](scripts/) | helper scripts (`install-wallpapers.sh` → `~/Pictures/Wallpapers`) |
 | [docs/](docs/) | documentation (EN/RU) |
 
 ## Quick start

@@ -1,6 +1,8 @@
 // Конфиг niri (проверен против синтаксиса niri 26.04 из NixOS 26.05).
-// Системная копия лежит в /etc/niri/config.kdl; чтобы настраивать под себя,
-// скопируйте её в ~/.config/niri/config.kdl — пользовательский файл имеет приоритет.
+// Системная копия лежит в /etc/niri/config.kdl. Для личных настроек создайте
+// ~/.config/niri/config.kdl из двух частей: `include "/etc/niri/config.kdl"`
+// и ниже — свои добавки (они переопределяют включённое, а системная часть
+// продолжает обновляться при rebuild). Не копируйте файл целиком.
 // Проверка синтаксиса: `niri validate`. Список мониторов: `niri msg outputs`.
 
 input {
@@ -50,8 +52,10 @@ spawn-at-startup "mako"
 // xwayland-satellite запускать не нужно: niri >= 25.08 делает это сам,
 // когда X11-приложение пытается подключиться.
 
-// Обои: положите картинку в ~/Pictures/wallpaper.jpg или поменяйте путь.
-spawn-sh-at-startup "swaybg -i ~/Pictures/wallpaper.jpg -m fill"
+// Обои: кладите картинки в ~/Pictures/Wallpapers — при входе выбирается
+// случайная. Масштабирование под экран swaybg делает сам (-m fill), держите
+// картинки не меньше физического разрешения монитора (`niri msg outputs`).
+spawn-sh-at-startup "swaybg -i \"$(find ~/Pictures/Wallpapers -type f | shuf -n1)\" -m fill"
 // Автоблокировка: через 10 минут простоя — swaylock, через 15 — погасить мониторы.
 spawn-sh-at-startup "swayidle -w timeout 600 'swaylock -f' timeout 900 'niri msg action power-off-monitors'"
 // История буфера обмена (вызов — Mod+Shift+V).
